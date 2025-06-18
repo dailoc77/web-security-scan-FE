@@ -1,0 +1,343 @@
+.scan-history-section {
+  background: rgba(30, 41, 59, 0.9);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  text-align: center;
+}
+
+.scan-history-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.scan-history-icon svg {
+  color: #64748b;
+}
+
+/* Security Scan Section - Matching the image layout */
+.security-scan-section {
+  background: rgba(30, 41, 59, 0.95);
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 32px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 100%;
+  max-width: none;
+}
+
+.security-scan-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+}
+
+/* Input row - horizontal layout like in image */
+.security-scan-input-row {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  margin-bottom: 16px;
+  position: relative;
+  width: 100%;
+}
+
+.security-scan-input {
+  flex: 1;
+  padding: 16px 20px;
+  border-radius: 8px 0 0 8px; /* Rounded only on left side */
+  background: #374151;
+  color: #ffffff;
+  border: 2px solid #4b5563;
+  border-right: none; /* Remove right border to connect with button */
+  font-size: 1rem;
+  font-weight: 400;
+  transition: all 0.2s ease;
+  min-height: 48px;
+  outline: none;
+}
+
+.security-scan-input:focus {
+  border-color: #3b82f6;
+  background: #374151;
+  box-shadow: none;
+}
+
+.security-scan-input::placeholder {
+  color: #9ca3af;
+  font-weight: 400;
+}
+
+/* Button - connected to input like in image */
+.security-scan-btn {
+  padding: 16px 24px;
+  border-radius: 0 8px 8px 0; /* Rounded only on right side */
+  background: #3b82f6;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 1rem;
+  border: 2px solid #3b82f6;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+  min-width: 100px;
+}
+
+.security-scan-btn:hover:not(:disabled) {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.security-scan-btn:disabled {
+  background: #6b7280;
+  border-color: #6b7280;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.security-scan-description {
+  color: #9ca3af;
+  font-size: 0.9rem;
+  margin-top: 8px;
+  text-align: left;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.security-scan-input::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.security-scan-input:focus {
+  border: 2px solid #3b82f6;
+  background: linear-gradient(145deg, #1e293b, #2d3748);
+  outline: none;
+  box-shadow: 
+    0 0 0 4px rgba(59, 130, 246, 0.1),
+    0 8px 25px -5px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.security-scan-input:focus::before {
+  opacity: 1;
+}
+
+.security-scan-input::placeholder {
+  color: #94a3b8;
+  font-weight: 400;
+  transition: color 0.3s ease;
+}
+
+.security-scan-input:focus::placeholder {
+  color: #cbd5e1;
+}
+
+/* Input Field Animations and Enhanced Effects */
+.security-scan-input {
+  position: relative;
+}
+
+.security-scan-input:not(:placeholder-shown) {
+  background: linear-gradient(145deg, #1e293b, #2d3748);
+}
+
+/* Loading state for input */
+.security-scan-input.loading {
+  background: linear-gradient(145deg, #1e293b, #334155);
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* URL Icon positioned inside input */
+.security-scan-input-row::after {
+  content: '🌐';
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.3rem;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
+
+.security-scan-input:focus + *::after,
+.security-scan-input:not(:placeholder-shown) + *::after {
+  opacity: 1;
+  color: #3b82f6;
+}
+
+/* Adjusting input padding for icon */
+.security-scan-input {
+  padding-left: 50px;
+}
+
+/* Beautiful Button - Larger and more prominent */
+.security-scan-btn {
+  padding: 18px 32px; /* Increased padding */
+  border-radius: 12px;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.1rem; /* Slightly larger font */
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 60px; /* Match input height */
+  min-width: 160px; /* Minimum width */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px; /* Increased gap */
+  box-shadow: 
+    0 4px 6px -1px rgba(59, 130, 246, 0.5),
+    0 2px 4px -1px rgba(59, 130, 246, 0.3);
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.security-scan-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.security-scan-btn:hover {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 8px 25px -5px rgba(59, 130, 246, 0.5),
+    0 4px 6px -2px rgba(59, 130, 246, 0.3);
+}
+
+.security-scan-btn:hover::before {
+  left: 100%;
+}
+
+.security-scan-btn:active {
+  transform: translateY(-1px);
+}
+
+/* Button disabled state */
+.security-scan-btn:disabled {
+  background: linear-gradient(135deg, #64748b, #475569);
+  color: #94a3b8;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 
+    0 2px 4px -1px rgba(0, 0, 0, 0.1),
+    0 1px 2px -1px rgba(0, 0, 0, 0.06);
+}
+
+.security-scan-btn:disabled:hover {
+  background: linear-gradient(135deg, #64748b, #475569);
+  transform: none;
+  box-shadow: 
+    0 2px 4px -1px rgba(0, 0, 0, 0.1),
+    0 1px 2px -1px rgba(0, 0, 0, 0.06);
+}
+
+.security-scan-btn:disabled::before {
+  display: none;
+}
+
+.security-scan-description {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  margin-top: 12px;
+  text-align: center;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* Responsive Design - Matching image layout */
+@media (max-width: 768px) {
+  .security-scan-section {
+    padding: 24px 20px;
+    margin-bottom: 24px;
+  }
+  
+  .security-scan-input-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .security-scan-input {
+    border-radius: 8px 8px 0 0;
+    border-right: 2px solid #4b5563;
+  }
+  
+  .security-scan-btn {
+    border-radius: 0 0 8px 8px;
+    width: 100%;
+    border-top: none;
+  }
+  
+  .security-scan-title {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .security-scan-section {
+    padding: 20px 16px;
+    border-radius: 12px;
+  }
+  
+  .security-scan-input,
+  .security-scan-btn {
+    padding: 14px 16px;
+    font-size: 0.95rem;
+    min-height: 44px;
+  }
+  
+  .security-scan-title {
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+  }
+}

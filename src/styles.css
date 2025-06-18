@@ -1,0 +1,32 @@
+/* Global styles for the application */
+
+/* CSS Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+  color: #e3eaf7;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Ensure full background coverage */
+body {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+  background-attachment: fixed;
+  margin: 0;
+  background-color: #0f172a;
+  font-family: 'Segoe UI', sans-serif;
+  color: white;
+}

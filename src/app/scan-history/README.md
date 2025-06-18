@@ -1,0 +1,1 @@
+Scan History component folder.

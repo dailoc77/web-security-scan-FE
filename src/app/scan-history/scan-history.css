@@ -1,0 +1,59 @@
+.scan-history-section {
+  background: rgba(30, 41, 59, 0.9);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  text-align: center;
+}
+
+.scan-history-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.scan-history-icon svg {
+  color: #64748b;
+}
+
+/* Scan History Display Styles */
+.scan-history {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px 0;
+  text-align: center;
+}
+
+.scan-history-icon {
+  font-size: 3rem;
+  color: #64748b;
+  margin-bottom: 16px;
+}
+
+.scan-history-empty {
+  color: #94a3b8;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .scan-history-section {
+    padding: 16px;
+  }
+  
+  .scan-history-title {
+    font-size: 1.1rem;
+  }
+  
+  .scan-history {
+    padding: 32px 0;
+  }
+}
