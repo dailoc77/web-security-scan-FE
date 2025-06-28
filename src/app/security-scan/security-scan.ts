@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -10,13 +11,33 @@ import { FormsModule } from '@angular/forms';
 })
 export class SecurityScanComponent {
   url: string = '';
+  scanResult: any = null;
+  loading: boolean = false;
+  error: string = '';
+
+  constructor(private http: HttpClient) {}
+
   startScan() {
     if (!this.url) {
-      alert('Please enter a URL.');
+      this.error = 'Please enter a URL.';
       return;
     }
-    // TODO: Call backend API here
-    console.log('Scanning:', this.url);
+    this.loading = true;
+    this.error = '';
+    this.scanResult = null;
+
+    const params = new HttpParams().set('url', this.url);
+
+    this.http.post('http://localhost:8080/api/scan', params).subscribe({
+      next: (result) => {
+        this.scanResult = result;
+        this.loading = false;
+      },
+      error: (err) => {
+        this.error = 'Scan failed. Please try again.';
+        this.loading = false;
+      },
+    });
   }
 }
 

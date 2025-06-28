@@ -4,6 +4,7 @@ import { HeaderComponent } from './header/header';
 import { SecurityScanComponent } from './security-scan/security-scan';
 import { ScanHistoryComponent } from './scan-history/scan-history';
 
+
 @Component({
   selector: 'app-root',
   standalone: true,
