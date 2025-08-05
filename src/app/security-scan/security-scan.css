@@ -311,6 +311,30 @@
   line-height: 1.5;
 }
 
+/* Error Message Styling */
+.security-scan-error {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  animation: fadeIn 0.3s ease-in;
+}
+
+.error-icon {
+  margin-right: 10px;
+  font-size: 1.1rem;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* Responsive Design - Matching image layout */
 @media (max-width: 768px) {
   .security-scan-section {

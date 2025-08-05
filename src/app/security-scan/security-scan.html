@@ -3,21 +3,21 @@
   <div class="security-scan-input-row">
     <input [(ngModel)]="url" type="url" placeholder="Enter website URL (e.g., https://example.com)"
       class="security-scan-input" autocomplete="url" spellcheck="false" />
-    <!-- <button
-      (click)="startScan()"
-      class="security-scan-btn"
-      [disabled]="!url || url.length < 8"
-    >
-      🔍 Scan
-    </button> -->
     <button class="security-scan-btn" [disabled]="loading" (click)="startScan()">
       @if (loading) {
       <span class="spinner"></span>
       <span>Scanning...</span>
       } @else {
-      <span><i class="fa fa-search"></i>🔍 Scan</span>
+      <span><i class="fa fa-shield"></i>🔍 Scan Security</span>
       }
     </button>
   </div>
   <p class="security-scan-description">Enter a website URL to scan for common security vulnerabilities</p>
+  
+  @if (error) {
+  <div class="security-scan-error">
+    <span class="error-icon">⚠️</span>
+    <span>{{ error }}</span>
+  </div>
+  }
 </div>

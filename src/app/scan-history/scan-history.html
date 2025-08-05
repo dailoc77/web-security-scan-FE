@@ -1,13 +1,47 @@
 <div class="scan-history-section">
   <h2 class="scan-history-title">🕓 Scan History</h2>
-  <div class="flex flex-col items-center justify-center">
-    <span class="scan-history-icon">
-      <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2"></path>
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5A7.5 7.5 0 1112 19.5A7.5 7.5 0 0112 4.5z"></path>
-      </svg>
-    </span>
-    <p class="scan-history-empty">No previous scans found</p>
-    <small class="scan-history-description">Your scan history will appear here</small>
-  </div>
+  @if (scanHistory.length === 0) {
+    <div class="flex flex-col items-center justify-center">
+      <span class="scan-history-icon">
+        <!-- SVG icon here -->
+      </span>
+      <p class="scan-history-empty">No previous scans found</p>
+      <small class="scan-history-description">Your scan history will appear here</small>
+    </div>
+  } @else {
+    <ul class="scan-history-list">
+      @for (item of scanHistory; track item) {
+        <li class="scan-history-item">
+          <div class="scan-header">
+            <div class="scan-url">
+              <strong>{{ item.result?.scannedUrl || item.url }}</strong>
+              <span class="scan-time">({{ item.result?.scanTimestamp ? (item.result.scanTimestamp | date:'medium') : (item.time | date:'medium') }})</span>
+            </div>
+            @if (item.result?.riskLevel) {
+              <div class="scan-risk-level" [ngClass]="item.result.riskLevel.toLowerCase()">
+                Risk Level: {{ item.result.riskLevel }}
+              </div>
+            }
+            @if (item.result?.riskScore !== undefined) {
+              <div class="scan-risk-score">Risk Score: {{ item.result.riskScore }}/100</div>
+            }
+          </div>
+          @if (item.result?.criticalVulnerabilities) {
+            <div class="critical-vuln-section">
+              <h4 class="scan-section-title" style="color:#f87171;">Critical Vulnerabilities</h4>
+              <ul *ngIf="item.result.criticalVulnerabilities instanceof Array; else singleVuln">
+                <li *ngFor="let vuln of item.result.criticalVulnerabilities">{{ vuln }}</li>
+              </ul>
+              <ng-template #singleVuln>
+                <div>{{ item.result.criticalVulnerabilities }}</div>
+              </ng-template>
+            </div>
+          }
+          @if (item.error) {
+            <div class="error-message">{{ item.error }}</div>
+          }
+        </li>
+      }
+    </ul>
+  }
 </div>
