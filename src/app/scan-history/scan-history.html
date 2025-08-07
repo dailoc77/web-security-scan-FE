@@ -14,32 +14,39 @@
         <li class="scan-history-item">
           <div class="scan-header">
             <div class="scan-url">
-              <strong>{{ item.result?.scannedUrl || item.url }}</strong>
-              <span class="scan-time">({{ item.result?.scanTimestamp ? (item.result.scanTimestamp | date:'medium') : (item.time | date:'medium') }})</span>
+              <strong>{{ item.result?.url || item.url }}</strong>
+              <span class="scan-time">({{ item.result?.scan_time ? (item.result.scan_time | date:'medium') : (item.time | date:'medium') }})</span>
             </div>
-            @if (item.result?.riskLevel) {
-              <div class="scan-risk-level" [ngClass]="item.result.riskLevel.toLowerCase()">
-                Risk Level: {{ item.result.riskLevel }}
-              </div>
-            }
-            @if (item.result?.riskScore !== undefined) {
-              <div class="scan-risk-score">Risk Score: {{ item.result.riskScore }}/100</div>
-            }
+            <div class="scan-risk-level">
+              <b>Risk Level:</b> {{ item.result?.risk_level || 'N/A' }}
+            </div>
+            <div class="scan-most-common-owasp" *ngIf="item.result?.most_common_owasp">
+              <b>Most Common OWASP:</b> {{ item.result.most_common_owasp }}
+            </div>
+            <div class="scan-alerts">
+              <b>Alerts:</b> {{ item.result?.alerts?.length || 0 }}
+            </div>
+            <!-- ML Result removed -->
           </div>
-          @if (item.result?.criticalVulnerabilities) {
-            <div class="critical-vuln-section">
-              <h4 class="scan-section-title" style="color:#f87171;">Critical Vulnerabilities</h4>
-              <ul *ngIf="item.result.criticalVulnerabilities instanceof Array; else singleVuln">
-                <li *ngFor="let vuln of item.result.criticalVulnerabilities">{{ vuln }}</li>
-              </ul>
-              <ng-template #singleVuln>
-                <div>{{ item.result.criticalVulnerabilities }}</div>
-              </ng-template>
-            </div>
-          }
-          @if (item.error) {
+          <div class="scan-section-details" *ngIf="item.result?.alerts && item.result.alerts.length">
+            <h4 class="scan-section-title">Alerts Detail</h4>
+            <ul class="alert-list">
+              <li *ngFor="let alert of item.result.alerts" [ngClass]="{'alert-high': alert.risk && alert.risk.toLowerCase() === 'high'}">
+                <ng-container *ngIf="alert.name">
+                  <b>{{ alert.name }}</b> - {{ alert.risk }}<br>
+                  <span *ngIf="alert.description">{{ alert.description }}</span>
+                </ng-container>
+                <ng-container *ngIf="!alert.name">
+                  {{ alert | json }}
+                </ng-container>
+              </li>
+            </ul>
+          </div>
+          <!-- Spider Data and Active Scan Data removed -->
+          <!-- All Alerts from ES removed -->
+          <div class="scan-section-details" *ngIf="item.error">
             <div class="error-message">{{ item.error }}</div>
-          }
+          </div>
         </li>
       }
     </ul>

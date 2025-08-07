@@ -330,6 +330,48 @@
   font-weight: 500;
 }
 
+.scan-section-details pre {
+  background: #181f2a;
+  color: #e0e6f0;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 0.95em;
+  overflow-x: auto;
+  margin-bottom: 10px;
+}
+.scan-section-title {
+  margin: 10px 0 5px 0;
+  color: #60a5fa;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+.scan-ml-result, .scan-alerts, .scan-risk-level, .scan-most-common-owasp {
+  display: inline-block;
+  margin-right: 18px;
+  font-size: 1em;
+}
+.scan-header {
+  margin-bottom: 8px;
+}
+ul.alert-list {
+  padding-left: 18px;
+  margin-bottom: 10px;
+}
+ul.alert-list li {
+  margin-bottom: 4px;
+  background: #232b3b;
+  border-radius: 4px;
+  padding: 4px 8px;
+  color: #fbbf24;
+  font-size: 0.97em;
+}
+
+ul.alert-list li.alert-high {
+  background: #2f1515;
+  color: #f87171;
+  border: 1px solid #f87171;
+}
+
 /* Responsive styles */
 @media (max-width: 768px) {
   .scan-history-section {

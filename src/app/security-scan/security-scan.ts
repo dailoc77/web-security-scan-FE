@@ -41,15 +41,24 @@ export class SecurityScanComponent {
     // const params = new HttpParams().set('url', this.url);
 
     this.http
-      .post<any>('http://127.0.0.1:8080/api/v1/scan', {url: this.url})
+      .post<any>('http://127.0.0.1:8080/api/v1/scan', { url: this.url })
       .subscribe({
         next: (response) => {
-          console.log('Scan initiated', response);
-          if (response && response.scanId) {
-            // this.getScanSummary(response.scanId);
-            console.log('Scan ID:', response.scanId);
+          console.log('Scan completed', response);
+          if (response) {
+            // Lưu toàn bộ response để hiển thị chi tiết
+            this.scanResult = response;
+            // Thêm vào scanHistory
+            this.scanHistory.unshift({
+              url: response.url,
+              result: response,
+              time: new Date(),
+              riskLevel: response.risk_level,
+              scan_time: response.scan_time
+            });
+            this.loading = false;
           } else {
-            this.error = 'No scan ID received from API';
+            this.error = 'No scan result received from API';
             this.loading = false;
           }
         },
@@ -60,40 +69,20 @@ export class SecurityScanComponent {
         },
       });
 
-    // First: start scan and get scanId (POST)
-    // this.http.post<any>('http://localhost:8080/api/v1/scan', null, { params }).subscribe({
-    //   next: (response) => {
-    //     console.log('Scan initiated', response);
-    //     if (response && response.scanId) {
-    //       // Second: get the scan summary with scanId
-    //       this.getScanSummary(response.scanId);
-    //     } else {
-    //       this.error = 'No scan ID received from API';
-    //       this.loading = false;
-    //     }
-    //   },
-    //   error: (err) => {
-    //     this.error = 'Scan failed. Please try again.';
-    //     this.loading = false;
-    //     console.error('Scan error:', err);
-    //   },
-    // });
-  }
-
-  getScanSummary(scanId: string) {
-    this.http
-      .get<any>(`http://localhost:8080/api/v1/scan/${scanId}`)
-      .subscribe({
-        next: (summary) => {
-          console.log('Scan summary', summary);
-          this.loading = false;
-        },
-        error: (err) => {
-          this.error = 'Failed to get scan summary';
-          this.loading = false;
-          console.error('Summary error:', err);
-        },
-      });
+    // getScanSummary(scanId: string) {
+    //   this.http
+    //     .get<any>(`http://127.0.0.1:8080/api/v1/scan/${scanId}`)
+    //     .subscribe({
+    //       next: (summary) => {
+    //         console.log('Scan summary', summary);
+    //         this.loading = false;
+    //       },
+    //       error: (err) => {
+    //         this.error = 'Failed to get scan summary';
+    //         this.loading = false;
+    //         console.error('Summary error:', err);
+    //       },
+    //     });
   }
 
   // getScanSummary(scanId: string) {
