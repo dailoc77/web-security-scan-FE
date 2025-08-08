@@ -1,7 +1,7 @@
 <div class="security-scan-section">
   <h2 class="security-scan-title">🌐 Website Security Scan</h2>
   <div class="security-scan-input-row">
-    <input [(ngModel)]="url" type="url" placeholder="Enter website URL (e.g., https://example.com)"
+    <input [(ngModel)]="url" [disabled]="loading" type="url" placeholder="Enter website URL (e.g., https://example.com)"
       class="security-scan-input" autocomplete="url" spellcheck="false" />
     <button class="security-scan-btn" [disabled]="loading" (click)="startScan()">
       @if (loading) {

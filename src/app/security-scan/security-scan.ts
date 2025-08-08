@@ -1,16 +1,6 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
-interface ScanSummary {
-  url: string;
-  timestamp: string;
-  riskLevel: string;
-  highRiskVulnerabilities: {
-    name: string;
-    recommendation: string;
-  }[];
-}
 
 @Component({
   selector: 'app-security-scan',
@@ -27,6 +17,22 @@ export class SecurityScanComponent {
   scanHistory: any[] = [];
 
   constructor(private http: HttpClient) {}
+
+  // Hàm lọc alerts trùng lặp
+  private filterDuplicateAlerts(alerts: any[]): any[] {
+    if (!alerts || !Array.isArray(alerts)) return [];
+
+    const uniqueAlerts = new Map();
+
+    alerts.forEach((alert) => {
+      const key = `${alert.name || ''}_${alert.description || ''}`;
+      if (!uniqueAlerts.has(key)) {
+        uniqueAlerts.set(key, alert);
+      }
+    });
+
+    return Array.from(uniqueAlerts.values());
+  }
 
   startScan() {
     if (!this.url) {
@@ -46,6 +52,11 @@ export class SecurityScanComponent {
         next: (response) => {
           console.log('Scan completed', response);
           if (response) {
+            // Lọc alerts trùng lặp nếu có
+            if (response.alerts && Array.isArray(response.alerts)) {
+              response.alerts = this.filterDuplicateAlerts(response.alerts);
+            }
+
             // Lưu toàn bộ response để hiển thị chi tiết
             this.scanResult = response;
             // Thêm vào scanHistory
@@ -54,7 +65,7 @@ export class SecurityScanComponent {
               result: response,
               time: new Date(),
               riskLevel: response.risk_level,
-              scan_time: response.scan_time
+              scan_time: response.scan_time,
             });
             this.loading = false;
           } else {
