@@ -15,6 +15,10 @@ export interface RegisterRequest {
   password: string;
 }
 
+export interface GoogleLoginRequest {
+  id_token: string;
+}
+
 export interface AuthResponse {
   access: string;
   refresh: string;
@@ -30,6 +34,28 @@ export interface AuthResponse {
   providedIn: 'root'
 })
 export class AuthService {
+
+  /**
+   * Đăng nhập bằng Google (id_token)
+   */
+  loginWithGoogle(googleData: GoogleLoginRequest): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.API_BASE_URL}/api/auth/google-login/`, googleData)
+      .pipe(
+        tap((response: AuthResponse) => {
+          // Lưu thông tin user và token (chỉ khi browser)
+          if (this.isBrowser && response.access) {
+            localStorage.setItem('authToken', response.access);
+            localStorage.setItem('refreshToken', response.refresh);
+            if (response.user) {
+              localStorage.setItem('user', JSON.stringify(response.user));
+              this.currentUserSubject.next(response.user);
+            }
+          }
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   private readonly API_BASE_URL = 'http://localhost:8080'; // Cập nhật theo backend của bạn
   private currentUserSubject = new BehaviorSubject<any>(null);
   public currentUser$ = this.currentUserSubject.asObservable();

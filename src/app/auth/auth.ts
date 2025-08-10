@@ -1,8 +1,9 @@
-import { Component, signal } from '@angular/core';
+  import { Component, signal, NgZone, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../services';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-auth',
@@ -28,7 +29,48 @@ export class AuthComponent {
     confirmPassword: ''
   };
   
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private ngZone: NgZone,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    if (isPlatformBrowser(this.platformId)) {
+      (window as any).ngAuthComponentInstance = this;
+      (window as any).ngZoneForGoogleLogin = ngZone;
+    }
+  }
+
+  // Google Sign-In popup (client only)
+  async googleSignIn() {
+    if (typeof window === 'undefined') return;
+    // Load Google Identity Services script nếu chưa có
+    if (!document.getElementById('google-identity-script')) {
+      const script = document.createElement('script');
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.defer = true;
+      script.id = 'google-identity-script';
+      document.body.appendChild(script);
+      await new Promise(resolve => { script.onload = resolve; });
+    }
+
+    // Hiển thị popup đăng nhập Google
+    const clientId = '151790877094-u6f3dkk7oe4opbe6n2p6nnc74s0ds0vn.apps.googleusercontent.com'; // Thay bằng client_id của bạn
+    const callback = (response: any) => {
+      if (response.credential) {
+        this.onGoogleLogin(response.credential);
+      }
+    };
+    // @ts-ignore
+    window.google.accounts.id.initialize({
+      client_id: clientId,
+      callback,
+      ux_mode: 'popup',
+    });
+    // @ts-ignore
+    window.google.accounts.id.prompt();
+  }
   
   // Toggle between login and register
   toggleMode() {
@@ -116,6 +158,22 @@ export class AuthComponent {
         this.loading.set(false);
         console.error('Register error:', error);
         alert(error.message || 'Đăng ký thất bại. Vui lòng thử lại!');
+      }
+    });
+  }
+
+  // Đăng nhập Google
+  onGoogleLogin(idToken: string) {
+    this.loading.set(true);
+    this.authService.loginWithGoogle({ id_token: idToken }).subscribe({
+      next: (response) => {
+        this.loading.set(false);
+        alert('Đăng nhập Google thành công!');
+        this.router.navigate(['/dashboard']);
+      },
+      error: (error) => {
+        this.loading.set(false);
+        alert(error.message || 'Đăng nhập Google thất bại!');
       }
     });
   }
