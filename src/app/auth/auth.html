@@ -1,0 +1,153 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <!-- Header -->
+    <div class="auth-header">
+      <div class="auth-logo">
+        <span class="shield-icon">🛡️</span>
+        <h1 class="auth-title">WebGuardian</h1>
+      </div>
+      <p class="auth-subtitle">
+        {{ isLogin() ? 'Đăng nhập vào hệ thống bảo mật' : 'Tạo tài khoản mới' }}
+      </p>
+    </div>
+
+    <!-- Login Form -->
+    <form *ngIf="isLogin()" class="auth-form" (ngSubmit)="onLogin()">
+      <div class="form-group">
+        <label class="form-label">Tên người dùng</label>
+        <input 
+          type="text" 
+          class="form-input"
+          [(ngModel)]="loginData.username"
+          name="username"
+          placeholder="Nhập tên người dùng"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Mật khẩu</label>
+        <input 
+          type="password" 
+          class="form-input"
+          [(ngModel)]="loginData.password"
+          name="password"
+          placeholder="Nhập mật khẩu"
+          required
+        >
+      </div>
+
+      <div class="form-options">
+        <label class="checkbox-label">
+          <input type="checkbox" class="checkbox">
+          <span class="checkbox-text">Ghi nhớ đăng nhập</span>
+        </label>
+        <a href="#" class="forgot-link">Quên mật khẩu?</a>
+      </div>
+
+      <button 
+        type="submit" 
+        class="auth-btn primary"
+        [disabled]="loading()"
+      >
+        <span *ngIf="!loading()">🔐 Đăng nhập</span>
+        <span *ngIf="loading()" class="loading">
+          <span class="spinner"></span>
+          Đang xử lý...
+        </span>
+      </button>
+    </form>
+
+    <!-- Register Form -->
+    <form *ngIf="!isLogin()" class="auth-form" (ngSubmit)="onRegister()">
+      <div class="form-group">
+        <label class="form-label">Tên người dùng</label>
+        <input 
+          type="text" 
+          class="form-input"
+          [(ngModel)]="registerData.username"
+          name="username"
+          placeholder="Nhập tên người dùng"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input 
+          type="email" 
+          class="form-input"
+          [(ngModel)]="registerData.email"
+          name="email"
+          placeholder="Nhập địa chỉ email"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Mật khẩu</label>
+        <input 
+          type="password" 
+          class="form-input"
+          [(ngModel)]="registerData.password"
+          name="password"
+          placeholder="Nhập mật khẩu (tối thiểu 6 ký tự)"
+          required
+        >
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Xác nhận mật khẩu</label>
+        <input 
+          type="password" 
+          class="form-input"
+          [(ngModel)]="registerData.confirmPassword"
+          name="confirmPassword"
+          placeholder="Nhập lại mật khẩu"
+          required
+        >
+      </div>
+
+      <div class="form-options">
+        <label class="checkbox-label">
+          <input type="checkbox" class="checkbox" required>
+          <span class="checkbox-text">Tôi đồng ý với <a href="#" class="terms-link">điều khoản sử dụng</a></span>
+        </label>
+      </div>
+
+      <button 
+        type="submit" 
+        class="auth-btn primary"
+        [disabled]="loading()"
+      >
+        <span *ngIf="!loading()">✨ Tạo tài khoản</span>
+        <span *ngIf="loading()" class="loading">
+          <span class="spinner"></span>
+          Đang xử lý...
+        </span>
+      </button>
+    </form>
+
+    <!-- Toggle Mode -->
+    <div class="auth-toggle">
+      <p class="toggle-text">
+        {{ isLogin() ? 'Chưa có tài khoản?' : 'Đã có tài khoản?' }}
+        <button 
+          type="button" 
+          class="toggle-btn"
+          (click)="toggleMode()"
+        >
+          {{ isLogin() ? 'Đăng ký ngay' : 'Đăng nhập' }}
+        </button>
+      </p>
+    </div>
+
+    <!-- Security Notice -->
+    <div class="security-notice">
+      <span class="security-icon">🔒</span>
+      <p class="security-text">
+        Thông tin của bạn được mã hóa và bảo vệ bởi các tiêu chuẩn bảo mật cao nhất
+      </p>
+    </div>
+  </div>
+</div>
