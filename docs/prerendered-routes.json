@@ -1,5 +1,9 @@
 {
   "routes": {
-    "/web-security-scan-FE": {}
+    "/web-security-scan-FE": {},
+    "/web-security-scan-FE/auth": {},
+    "/web-security-scan-FE/dashboard": {},
+    "/web-security-scan-FE/login": {},
+    "/web-security-scan-FE/register": {}
   }
 }
