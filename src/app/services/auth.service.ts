@@ -1,6 +1,7 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
@@ -26,6 +27,8 @@ export interface AuthResponse {
     id: string;
     username: string;
     email: string;
+    role?: string; // Thêm role field
+    is_admin?: boolean; // Alternative field cho admin check
   };
   message?: string;
 }
@@ -69,6 +72,7 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
+    private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
@@ -99,6 +103,24 @@ export class AuthService {
       .pipe(
         tap(response => {
           console.log('Regular login response:', response);
+          
+          // MOCK: Tạm thời set admin role cho test (Remove khi có BE thực tế)
+          if (loginData.username === 'admin' || loginData.username === 'truongdailoc.dev') {
+            if (response.user) {
+              response.user.role = 'admin';
+              response.user.is_admin = true;
+            } else {
+              response.user = {
+                id: '1',
+                username: loginData.username,
+                email: loginData.username + '@admin.com',
+                role: 'admin',
+                is_admin: true
+              };
+            }
+            console.log('MOCK: Set admin role for test user');
+          }
+          
           // Lưu thông tin user và token (chỉ khi browser)
           if (this.isBrowser && response.access) {
             localStorage.setItem('authToken', response.access);
@@ -156,6 +178,34 @@ export class AuthService {
    */
   getCurrentUser(): any {
     return this.currentUserSubject.value;
+  }
+
+  /**
+   * Kiểm tra user có phải admin không
+   */
+  isAdmin(): boolean {
+    if (!this.isBrowser) return false;
+    const user = this.getCurrentUser();
+    return user?.role === 'admin' || user?.is_admin === true;
+  }
+
+  /**
+   * Lấy role của user hiện tại
+   */
+  getUserRole(): string {
+    const user = this.getCurrentUser();
+    return user?.role || 'user';
+  }
+
+  /**
+   * Redirect user sau khi đăng nhập thành công
+   */
+  redirectAfterLogin(): void {
+    if (this.isAdmin()) {
+      this.router.navigate(['/admin']);
+    } else {
+      this.router.navigate(['/dashboard']);
+    }
   }
 
   /**

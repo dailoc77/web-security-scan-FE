@@ -1,0 +1,112 @@
+<div class="admin-container">
+  <app-header></app-header>
+  
+  <div class="admin-content">
+    <!-- Header Section -->
+
+    <!-- Navigation Tabs -->
+    <div class="admin-tabs">
+      <div class="tab active">
+        <span class="tab-icon">📊</span>
+        Tổng quan
+      </div>
+      <div class="tab">
+        <span class="tab-icon">👥</span>
+        Người dùng
+      </div>
+      <div class="tab">
+        <span class="tab-icon">📋</span>
+        Dữ liệu quét
+      </div>
+      <div class="tab">
+        <span class="tab-icon">⚙️</span>
+        Sức khỏe hệ thống
+      </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-title">Tổng người dùng</span>
+          <span class="stat-icon">👥</span>
+        </div>
+        <div class="stat-value">{{ stats.totalUsers }}</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-title">Đang hoạt động</span>
+          <span class="stat-icon">🔄</span>
+        </div>
+        <div class="stat-value">{{ stats.activeScans }}</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-title">Tổng lượt quét</span>
+          <span class="stat-icon">🔍</span>
+        </div>
+        <div class="stat-value">{{ stats.totalScans }}</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-header">
+          <span class="stat-title">Quét thất bại</span>
+          <span class="stat-icon">❌</span>
+        </div>
+        <div class="stat-value">{{ stats.failedScans }}</div>
+      </div>
+    </div>
+
+    <!-- Chart Section -->
+    <div class="chart-section">
+      <h2 class="chart-title">Biểu đồ lượt quét theo ngày</h2>
+      <div class="chart-container">
+        <div class="chart-wrapper">
+          <!-- Y-axis labels -->
+          <div class="chart-y-axis">
+            <div class="y-label">60</div>
+            <div class="y-label">45</div>
+            <div class="y-label">30</div>
+            <div class="y-label">15</div>
+            <div class="y-label">0</div>
+          </div>
+          
+          <!-- Chart bars -->
+          <div class="chart-bars">
+            <div class="chart-line"></div>
+            <div 
+              *ngFor="let data of chartData; let i = index" 
+              class="chart-bar-container"
+            >
+              <div 
+                class="chart-bar"
+                [style.height.%]="getChartHeight(data.scans)"
+              ></div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- X-axis labels -->
+        <div class="chart-x-axis">
+          <div *ngFor="let data of chartData" class="x-label">
+            {{ data.day }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-overlay">
+      <div class="spinner"></div>
+      <p>Đang tải dữ liệu admin...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error" class="error-message">
+      <span class="error-icon">⚠️</span>
+      <span>{{ error }}</span>
+    </div>
+  </div>
+</div>

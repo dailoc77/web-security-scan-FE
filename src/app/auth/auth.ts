@@ -109,7 +109,8 @@ export class AuthComponent {
         this.loading.set(false);
         console.log('Login response:', response);
         alert('Đăng nhập thành công!');
-        this.router.navigate(['/dashboard']);
+        // Redirect based on user role
+        this.authService.redirectAfterLogin();
       },
       error: (error) => {
         this.loading.set(false);
@@ -179,9 +180,10 @@ export class AuthComponent {
             
             // Đợi một chút để đảm bảo token được lưu và change detection hoàn tất
             setTimeout(() => {
-              console.log('Navigation to dashboard after Google login');
+              console.log('Navigation after Google login based on role');
               alert('Đăng nhập Google thành công!');
-              this.router.navigate(['/dashboard']);
+              // Redirect based on user role
+              this.authService.redirectAfterLogin();
             }, 200); // Tăng timeout
           });
         },

@@ -1,7 +1,8 @@
 import { Routes } from '@angular/router';
 import { AuthComponent } from './auth';
 import { DashboardComponent } from './dashboard/dashboard';
-import { authGuard, publicGuard } from './guards';
+import { AdminComponent } from './admin';
+import { authGuard, publicGuard, adminGuard } from './guards';
 
 export const routes: Routes = [
   { 
@@ -23,6 +24,12 @@ export const routes: Routes = [
     component: DashboardComponent,
     title: 'Dashboard - WebGuardian',
     canActivate: [authGuard]
+  },
+  { 
+    path: 'admin', 
+    component: AdminComponent,
+    title: 'Admin Panel - WebGuardian',
+    canActivate: [adminGuard] // Sử dụng adminGuard đã cập nhật
   },
   { 
     path: '', 
