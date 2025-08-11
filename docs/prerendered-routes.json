@@ -1,6 +1,7 @@
 {
   "routes": {
     "/web-security-scan-FE": {},
+    "/web-security-scan-FE/admin": {},
     "/web-security-scan-FE/auth": {},
     "/web-security-scan-FE/dashboard": {},
     "/web-security-scan-FE/login": {},
