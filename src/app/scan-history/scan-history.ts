@@ -1,4 +1,4 @@
-import { Component, Input, Pipe, PipeTransform } from '@angular/core';
+import { Component, Input, Pipe, PipeTransform, OnChanges, SimpleChanges, ChangeDetectorRef, NgZone } from '@angular/core';
 import { DatePipe, NgClass, CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
@@ -24,8 +24,27 @@ interface ScanHistoryItem {
   templateUrl: './scan-history.html',
   styleUrls: ['./scan-history.css'],
 })
-export class ScanHistoryComponent {
+export class ScanHistoryComponent implements OnChanges {
   @Input() scanHistory: ScanHistoryItem[] = [];
+
+  constructor(
+    private cdr: ChangeDetectorRef,
+    private ngZone: NgZone
+  ) {}
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['scanHistory']) {
+      console.log('ScanHistory component - Input changed:');
+      console.log('Previous value:', changes['scanHistory'].previousValue);
+      console.log('Current value:', changes['scanHistory'].currentValue);
+      console.log('Scan history length:', this.scanHistory?.length || 0);
+      
+      // Force change detection
+      this.ngZone.run(() => {
+        this.cdr.detectChanges();
+      });
+    }
+  }
 
   // Extract recommendations by priority section (HIGH, MEDIUM, LOW)
   extractRecommendations(scanningResult: string): { title: string, content: string }[] {

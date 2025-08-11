@@ -59,7 +59,10 @@ export class AuthComponent {
     const clientId = '151790877094-u6f3dkk7oe4opbe6n2p6nnc74s0ds0vn.apps.googleusercontent.com'; // Thay bằng client_id của bạn
     const callback = (response: any) => {
       if (response.credential) {
-        this.onGoogleLogin(response.credential);
+        // Đảm bảo callback chạy trong Angular zone
+        this.ngZone.run(() => {
+          this.onGoogleLogin(response.credential);
+        });
       }
     };
     // @ts-ignore
@@ -164,17 +167,32 @@ export class AuthComponent {
 
   // Đăng nhập Google
   onGoogleLogin(idToken: string) {
-    this.loading.set(true);
-    this.authService.loginWithGoogle({ id_token: idToken }).subscribe({
-      next: (response) => {
-        this.loading.set(false);
-        alert('Đăng nhập Google thành công!');
-        this.router.navigate(['/dashboard']);
-      },
-      error: (error) => {
-        this.loading.set(false);
-        alert(error.message || 'Đăng nhập Google thất bại!');
-      }
+    this.ngZone.run(() => {
+      this.loading.set(true);
+      console.log('Processing Google login with token');
+      
+      this.authService.loginWithGoogle({ id_token: idToken }).subscribe({
+        next: (response) => {
+          this.ngZone.run(() => {
+            this.loading.set(false);
+            console.log('Google login successful:', response);
+            
+            // Đợi một chút để đảm bảo token được lưu và change detection hoàn tất
+            setTimeout(() => {
+              console.log('Navigation to dashboard after Google login');
+              alert('Đăng nhập Google thành công!');
+              this.router.navigate(['/dashboard']);
+            }, 200); // Tăng timeout
+          });
+        },
+        error: (error) => {
+          this.ngZone.run(() => {
+            this.loading.set(false);
+            console.error('Google login error:', error);
+            alert(error.message || 'Đăng nhập Google thất bại!');
+          });
+        }
+      });
     });
   }
 }

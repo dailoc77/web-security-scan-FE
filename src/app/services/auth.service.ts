@@ -42,6 +42,7 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.API_BASE_URL}/api/auth/google-login/`, googleData)
       .pipe(
         tap((response: AuthResponse) => {
+          console.log('Google login response:', response);
           // Lưu thông tin user và token (chỉ khi browser)
           if (this.isBrowser && response.access) {
             localStorage.setItem('authToken', response.access);
@@ -50,6 +51,11 @@ export class AuthService {
               localStorage.setItem('user', JSON.stringify(response.user));
               this.currentUserSubject.next(response.user);
             }
+            console.log('Google login tokens saved:', {
+              access: !!response.access,
+              refresh: !!response.refresh,
+              user: response.user
+            });
           }
         }),
         catchError(this.handleError)
@@ -92,6 +98,7 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.API_BASE_URL}/api/auth/login/`, loginData)
       .pipe(
         tap(response => {
+          console.log('Regular login response:', response);
           // Lưu thông tin user và token (chỉ khi browser)
           if (this.isBrowser && response.access) {
             localStorage.setItem('authToken', response.access);
@@ -100,6 +107,11 @@ export class AuthService {
               localStorage.setItem('user', JSON.stringify(response.user));
               this.currentUserSubject.next(response.user);
             }
+            console.log('Regular login tokens saved:', {
+              access: !!response.access,
+              refresh: !!response.refresh,
+              user: response.user
+            });
           }
         }),
         catchError(this.handleError)
@@ -122,17 +134,21 @@ export class AuthService {
    * Kiểm tra user đã đăng nhập chưa
    */
   isAuthenticated(): boolean {
-  if (!this.isBrowser) return false;
-  const token = localStorage.getItem('authToken');
-  return !!token;
+    if (!this.isBrowser) return false;
+    const token = localStorage.getItem('authToken');
+    const isAuth = !!token;
+    console.log('Checking authentication:', isAuth);
+    return isAuth;
   }
 
   /**
    * Lấy token
    */
   getToken(): string | null {
-  if (!this.isBrowser) return null;
-  return localStorage.getItem('authToken');
+    if (!this.isBrowser) return null;
+    const token = localStorage.getItem('authToken');
+    console.log('Getting token:', token ? 'Token exists' : 'No token found');
+    return token;
   }
 
   /**

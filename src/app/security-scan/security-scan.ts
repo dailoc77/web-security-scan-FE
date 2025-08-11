@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Component, NgZone, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../services';
 
 @Component({
   selector: 'app-security-scan',
@@ -16,7 +17,12 @@ export class SecurityScanComponent {
   error: string = '';
   scanHistory: any[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+    private ngZone: NgZone,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   // Hàm lọc alerts trùng lặp
   private filterDuplicateAlerts(alerts: any[]): any[] {
@@ -39,44 +45,91 @@ export class SecurityScanComponent {
       this.error = 'Please enter a URL.';
       return;
     }
-    this.loading = true;
-    this.error = '';
-    this.scanResult = null;
 
-    // Prepare params for scan
-    // const params = new HttpParams().set('url', this.url);
+    // Kiểm tra authentication state
+    if (!this.authService.isAuthenticated()) {
+      this.error = 'You must be logged in to perform a scan.';
+      return;
+    }
+
+    // Đảm bảo chạy trong Angular zone
+    this.ngZone.run(() => {
+      this.loading = true;
+      this.error = '';
+      this.scanResult = null;
+      this.cdr.detectChanges(); // Force change detection
+    });
+
+    // Get token để đảm bảo có authorization header
+    const token = this.authService.getToken();
+    console.log('Starting scan with token:', token ? 'Token exists' : 'No token');
+    console.log('Authentication status:', this.authService.isAuthenticated());
+    console.log('Current user:', this.authService.getCurrentUser());
+
+    // Tạo headers với token nếu có
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
 
     this.http
-      .post<any>('http://127.0.0.1:8080/api/v1/scan', { url: this.url })
+      .post<any>('http://127.0.0.1:8080/api/v1/scan', 
+        { url: this.url },
+        { headers }
+      )
       .subscribe({
         next: (response) => {
-          console.log('Scan completed', response);
-          if (response) {
-            // Lọc alerts trùng lặp nếu có
-            if (response.alerts && Array.isArray(response.alerts)) {
-              response.alerts = this.filterDuplicateAlerts(response.alerts);
-            }
+          this.ngZone.run(() => {
+            console.log('Scan completed', response);
+            if (response) {
+              // Lọc alerts trùng lặp nếu có
+              if (response.alerts && Array.isArray(response.alerts)) {
+                response.alerts = this.filterDuplicateAlerts(response.alerts);
+              }
 
-            // Lưu toàn bộ response để hiển thị chi tiết
-            this.scanResult = response;
-            // Thêm vào scanHistory
-            this.scanHistory.unshift({
-              url: response.url,
-              result: response,
-              time: new Date(),
-              riskLevel: response.risk_level,
-              scan_time: response.scan_time,
-            });
-            this.loading = false;
-          } else {
-            this.error = 'No scan result received from API';
-            this.loading = false;
-          }
+              // Lưu toàn bộ response để hiển thị chi tiết
+              this.scanResult = response;
+              
+              // Thêm vào scanHistory
+              const historyItem = {
+                url: response.url || this.url,
+                result: response,
+                time: new Date(),
+                riskLevel: response.risk_level,
+                scan_time: response.scan_time,
+              };
+              
+              console.log('Adding to scan history:', historyItem);
+              this.scanHistory.unshift(historyItem);
+              console.log('Updated scan history length:', this.scanHistory.length);
+              
+              this.loading = false;
+              this.cdr.detectChanges(); // Force change detection
+            } else {
+              this.error = 'No scan result received from API';
+              this.loading = false;
+              this.cdr.detectChanges();
+            }
+          });
         },
         error: (err) => {
-          this.error = 'Scan failed. Please try again.';
-          this.loading = false;
-          console.error('Scan error:', err);
+          this.ngZone.run(() => {
+            console.error('Scan error:', err);
+            if (err.status === 401) {
+              this.error = 'Authentication failed. Please login again.';
+              // Optionally redirect to login
+              this.authService.logout();
+            } else if (err.status === 403) {
+              this.error = 'Access denied. You do not have permission to perform scans.';
+            } else {
+              this.error = 'Scan failed. Please try again.';
+            }
+            this.loading = false;
+            this.cdr.detectChanges();
+          });
         },
       });
 
