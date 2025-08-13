@@ -1,3 +1,37 @@
+.ai-analyze-btn {
+  position: absolute;
+  right: 18px;
+  bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(90deg, #2563eb 60%, #38bdf8 100%);
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 7px 16px 7px 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(30,41,59,0.10);
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+  z-index: 2;
+}
+.ai-analyze-btn:hover {
+  background: linear-gradient(90deg, #1e40af 60%, #0ea5e9 100%);
+  box-shadow: 0 4px 16px rgba(30,41,59,0.18);
+  transform: translateY(-2px) scale(1.04);
+}
+.ai-icon {
+  display: flex;
+  align-items: center;
+  font-size: 1.2em;
+}
+.ai-label {
+  font-size: 1em;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
 .scan-history-section {
   background: rgba(30, 41, 59, 0.9);
   border-radius: 12px;
@@ -49,6 +83,7 @@
   margin-bottom: 16px;
   border: 1px solid rgba(71, 85, 105, 0.2);
   transition: all 0.2s ease;
+  position: relative;
 }
 
 .scan-history-item:hover {
@@ -133,6 +168,7 @@
   margin-bottom: 16px;
   border: 1px solid rgba(71, 85, 105, 0.2);
   transition: all 0.2s ease;
+  padding-bottom: 50px;
 }
 
 .scan-history-item:hover {

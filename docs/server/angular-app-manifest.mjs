@@ -35,11 +35,11 @@ export default {
 ],
   entryPointToBrowserMapping: undefined,
   assets: {
-    'index.csr.html': {size: 1078, hash: 'b81e41be627bf0156b6cee17a9f3f8ca9d361a8ba9456dde31b1152dce5b09ba', text: () => import('./assets-chunks/index_csr_html.mjs').then(m => m.default)},
-    'index.server.html': {size: 1021, hash: '976b181ecb062afc0eb7148d758869023139925e606b872479a82c0351d01e47', text: () => import('./assets-chunks/index_server_html.mjs').then(m => m.default)},
-    'dashboard/index.html': {size: 12939, hash: '9885774e2423ede410b564643fb92096eb70eec78a0da33943084441e5af48e5', text: () => import('./assets-chunks/dashboard_index_html.mjs').then(m => m.default)},
-    'auth/index.html': {size: 12939, hash: '9885774e2423ede410b564643fb92096eb70eec78a0da33943084441e5af48e5', text: () => import('./assets-chunks/auth_index_html.mjs').then(m => m.default)},
-    'admin/index.html': {size: 12939, hash: '9885774e2423ede410b564643fb92096eb70eec78a0da33943084441e5af48e5', text: () => import('./assets-chunks/admin_index_html.mjs').then(m => m.default)},
+    'index.csr.html': {size: 1078, hash: '6ab278d08939692b89485cd1b9fbe85007b7dc47fac920dd48ccdac5e9be8c9d', text: () => import('./assets-chunks/index_csr_html.mjs').then(m => m.default)},
+    'index.server.html': {size: 1021, hash: '6f3b581b88da72a3c3fef205b4fa29a6c6f263bede377c50c76d6352cd4d9137', text: () => import('./assets-chunks/index_server_html.mjs').then(m => m.default)},
+    'admin/index.html': {size: 12939, hash: '3647bc3b2ca20c761121131275c03ace4f1327a5fd44a52adf899e3df3e40117', text: () => import('./assets-chunks/admin_index_html.mjs').then(m => m.default)},
+    'dashboard/index.html': {size: 12939, hash: '3647bc3b2ca20c761121131275c03ace4f1327a5fd44a52adf899e3df3e40117', text: () => import('./assets-chunks/dashboard_index_html.mjs').then(m => m.default)},
+    'auth/index.html': {size: 12939, hash: '3647bc3b2ca20c761121131275c03ace4f1327a5fd44a52adf899e3df3e40117', text: () => import('./assets-chunks/auth_index_html.mjs').then(m => m.default)},
     'styles-W4FRUZWP.css': {size: 445, hash: 'fDiF7V5zqW0', text: () => import('./assets-chunks/styles-W4FRUZWP_css.mjs').then(m => m.default)}
   },
 };
